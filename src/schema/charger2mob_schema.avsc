@@ -1,0 +1,331 @@
+[
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
+    "name": "MobOCPPStartupNotification",
+    "fields": [
+      {"name": "OCPPBackendId", "type": "string"},
+      {"name": "NotificationCreatedAt", "type": "string"}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
+    "name": "MobOCPPShutdownNotification",
+    "fields": [
+      {"name": "OCPPBackendId", "type": "string"},
+      {"name": "NotificationCreatedAt", "type": "string"},
+      {"name": "ShutdownReason", "type": ["null", "string"], "default": null}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
+    "name": "CSResponse",
+    "fields": [
+      {"name": "MessageId", "type": "string"},
+      {"name": "ResponseCreatedAt", "type": "string"},
+      {"name": "OCPPBackendId", "type": "string"},
+      {"name": "Error",  "type": ["null", "string"], "default": null}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "enum",
+    "name": "CSBackendStatusEnum",
+    "symbols":  ["CS_UNKNOWN", "CS_NOT_CONNECTED", "CS_CONNECTED"]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "enum",
+    "name": "CSRequestResultEnum",
+    "symbols":  ["Accepted", "Rejected", "Unknown"]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "enum",
+    "name": "CPConnectorStatusEnum",
+    "symbols":  ["Available", "Occupied", "Reserved", "Unavailable", "Faulted"]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "enum",
+    "name": "CPChargingStateEnum",
+    "symbols":  ["Charging", "Discharging", "EVConnected", "SuspendedEV", "SuspendedEVSE", "Idle"]
+  },
+  // 12.10.2022: Added "Discharging" for MobS2W
+  // V1X ChargePointStatus Mapping: V1X-Value to V2.0 Values "CPConnectorStatusEnum" , "CPChargingStateEnum"
+  // "Available"     => "Available"       , "Idle"
+  // "Preparing"     => "Occupied"        , "EVConnected"
+  // "Charging"      => "Occupied"        , "Charging"
+  // "SuspendedEVSE" => "Occupied"        , "SuspendedEVSE"
+  // "SuspendedEV"   => "Occupied"        , "SuspendedEV"
+  // "Finishing"     => "Occupied"        , "EVConnected"
+  // "Reserved"      => "Reserved"        , "Idle"
+  // "Unavailable"   => "Unavailable"     , null
+  // "Faulted"       => "Faulted"         , null
+
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
+    "name": "CPStatusHistoryEntry",
+    "fields": [
+      {"name": "Timestamp", "type": "string"},
+      {"name": "ConnectorStatus", "type": "CPConnectorStatusEnum"},
+      {"name": "ChargingState", "type": ["null", "CPChargingStateEnum"], "default": null},
+      {"name": "ErrorCode", "type": ["null", "string"], "default": null},
+      {"name": "ErrorInfo", "type": ["null", "string"], "default": null}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
+    "name": "CPTransactionHistoryEntry",
+    "fields": [
+      {"name": "StartTimestamp", "type": "string"},
+      {"name": "StopTimestamp", "type": ["null", "string"], "default": null},
+      {"name": "StartValue", "type": "int"},
+      {"name": "StopValue", "type": ["null", "int"], "default": null}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
+    "name": "CPStatusConnectedConnectorActiveTransaction",
+    "fields": [
+      {"name": "StartActiveTransaction", "type": "string"},
+      {"name": "ChargingcablePluginAt", "type": ["null", "string"], "default": null},
+      {"name": "ChargingAmpereL1", "type": "int"},
+      {"name": "ChargingAmpereL2", "type": "int"},
+      {"name": "ChargingAmpereL3", "type": "int"},
+      {"name": "ChargingAmpereDC", "type": "int"},
+      {"name": "ChargingPowerWatt", "type": "int"},
+      {"name": "ChargedEnergyWatt", "type": "int"},
+      {"name": "StateOfCharge", "type": ["null", "int"], "default": null}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
+    "name": "CPStatus",
+    "fields": [
+      {"name": "ConnectorId", "type": "int"},
+      {"name": "ConnectorStatus", "type": ["null", "CPConnectorStatusEnum"], "default": null},
+      {"name": "ChargingState", "type": ["null", "CPChargingStateEnum"], "default": null},
+      {"name": "ActiveTransaction", "type": ["null", "CPStatusConnectedConnectorActiveTransaction"], "default": null},
+      {"name": "ErrorCode", "type": ["null", "string"], "default": null},
+      {"name": "ErrorInfo", "type": ["null", "string"], "default": null},
+      {"name":"CPStatusHistoryList",
+        "type":{
+          "type": "array",
+          "items":{
+            "name":"StatusHistory",
+            "type":"CPStatusHistoryEntry"
+          }
+        }
+      },
+      {"name":"CPTransactionHistoryList",
+        "type":{
+          "type": "array",
+          "items":{
+            "name":"TransactionHistory",
+            "type":"CPTransactionHistoryEntry"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
+    "name": "CSStatusDetail",
+    "fields": [
+      {"name": "Id", "type": "string"},
+      {"name": "BackendStatus", "type": "CSBackendStatusEnum"},
+      {"name": "Vendor",  "type": ["null", "string"], "default": null},
+      {"name": "Model", "type": ["null", "string"], "default": null},
+      {"name": "Firmwareversion", "type": ["null", "string"], "default": null},
+      {"name": "OCPPVersion", "type": ["null", "string"], "default": null},
+      {"name": "FirstContact", "type": ["null", "string"], "default": null},
+      {"name": "LastContact", "type": ["null", "string"], "default": null},
+      {"name": "IPAddress", "type": ["null", "string"], "default": null},
+      {"name":"CPStatusList",
+        "type":{
+          "type": "array",
+          "items":{
+            "name":"Status",
+            "type":"CPStatus"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
+    "name": "CSStatusForIdResponse",
+    "fields":[
+      {"name": "ResponseInfo", "type": "CSResponse" },
+      {"name": "Status", "type": "CSStatusDetail" }
+    ]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
+    "name": "CSStatusConnectedConnector",
+    "fields": [
+      {"name": "ConnectorId", "type": "int"},
+      {"name": "ConnectorStatus", "type": ["null", "CPConnectorStatusEnum"], "default": null},
+      {"name": "ChargingState", "type": ["null", "CPChargingStateEnum"], "default": null},
+      {"name": "ActiveTransaction", "type": ["null", "CPStatusConnectedConnectorActiveTransaction"], "default": null}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
+    "name": "CSStatusConnected",
+    "fields": [
+      {"name": "Id", "type": "string"},
+      {"name":"CSStatusConnectorList",
+        "type":{
+          "type": "array",
+          "items":{
+            "name":"StatusConnectedConnector",
+            "type":"CSStatusConnectedConnector"
+          }
+        }
+      },
+      {"name": "Vendor",  "type": ["null", "string"], "default": null},
+      {"name": "Model", "type": ["null", "string"], "default": null},
+      {"name": "LastContact", "type": ["null", "string"], "default": null}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
+    "name": "CSStatusConnectedResponse",
+    "fields":[
+      {"name": "ResponseInfo", "type": "CSResponse" },
+      {"name":"CSStatusList",
+        "type":{
+          "type": "array",
+          "items":{
+            "name":"Status",
+            "type":"CSStatusConnected"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
+    "name": "CSRecentlyConnected",
+    "fields": [
+      {"name": "Id", "type": "string"},
+      {"name": "Vendor",  "type": ["null", "string"], "default": null},
+      {"name": "Model", "type": ["null", "string"], "default": null},
+      {"name": "LastContact", "type": ["null", "string"], "default": null}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
+    "name": "CSRecentlyConnectedResponse",
+    "fields":[
+      {"name": "ResponseInfo", "type": "CSResponse" },
+      {"name":"CSRecentlyList",
+        "type":{
+          "type": "array",
+          "items":{
+            "name":"Status",
+            "type":"CSRecentlyConnected"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
+    "name": "CSResetResponse",
+    "fields": [
+      {"name": "ResponseInfo", "type": "CSResponse" },
+      {"name": "Id", "type": "string"},
+      {"name": "BackendStatus", "type": "CSBackendStatusEnum"},
+      {"name": "RequestResult", "type": ["null", "CSRequestResultEnum"], "default": null}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
+    "name": "CSUnlockResponse",
+    "fields": [
+      {"name": "ResponseInfo", "type": "CSResponse" },
+      {"name": "Id", "type": "string"},
+      {"name": "ConnectorId", "type": "int"},
+      {"name": "BackendStatus", "type": "CSBackendStatusEnum"},
+      {"name": "RequestResult", "type": ["null", "CSRequestResultEnum"], "default": null}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
+    "name": "CSStartChargingResponse",
+    "fields": [
+      {"name": "ResponseInfo", "type": "CSResponse" },
+      {"name": "Id", "type": "string"},
+      {"name": "ConnectorId", "type": "int"},
+      {"name": "BackendStatus", "type": "CSBackendStatusEnum"},
+      {"name": "RequestResult", "type": ["null", "CSRequestResultEnum"], "default": null}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
+    "name": "CSStopChargingResponse",
+    "fields": [
+      {"name": "ResponseInfo", "type": "CSResponse" },
+      {"name": "Id", "type": "string"},
+      {"name": "ConnectorId", "type": "int"},
+      {"name": "BackendStatus", "type": "CSBackendStatusEnum"},
+      {"name": "RequestResult", "type": ["null", "CSRequestResultEnum"], "default": null}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
+    "name": "CSChangeChargingCurrentResponse",
+    "fields": [
+      {"name": "ResponseInfo", "type": "CSResponse" },
+      {"name": "Id", "type": "string"},
+      {"name": "ConnectorId", "type": "int"},
+      {"name": "BackendStatus", "type": "CSBackendStatusEnum"},
+      {"name": "RequestResult", "type": ["null", "CSRequestResultEnum"], "default": null}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
+    "name": "CSTriggerResponse",
+    "fields": [
+      {"name": "ResponseInfo", "type": "CSResponse" },
+      {"name": "Id", "type": "string"},
+      {"name": "ConnectorId", "type": "int"},
+      {"name": "BackendStatus", "type": "CSBackendStatusEnum"},
+      {"name": "RequestResult", "type": ["null", "CSRequestResultEnum"], "default": null}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
+    "name": "CSOperationalStatusResponse",
+    "fields": [
+      {"name": "ResponseInfo", "type": "CSResponse" },
+      {"name": "Id", "type": "string"},
+      {"name": "ConnectorId", "type": "int"},
+      {"name": "BackendStatus", "type": "CSBackendStatusEnum"},
+      {"name": "RequestResult", "type": ["null", "CSRequestResultEnum"], "default": null}
+    ]
+  }
+]

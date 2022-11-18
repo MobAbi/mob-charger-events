@@ -1,0 +1,127 @@
+[
+  {
+    "namespace": "ch.mobility.mob2charger",
+    "type": "record",
+    "name": "CSRequest",
+    "fields": [
+      {"name": "MessageId", "type": "string"},
+      {"name": "RequestCreatedAt", "type": "string"}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.mob2charger",
+    "type": "enum",
+    "name": "CPOperationalStatusEnum",
+    "symbols":  ["OPERATIVE", "INOPERATIVE"]
+  },
+  {
+    "namespace": "ch.mobility.mob2charger",
+    "type": "enum",
+    "name": "CPTriggerKeywordsV1XEnum",
+    "symbols":  ["HEARTBEAT", "METER", "STATUS", "BOOT", "DIAGNOSTICS", "FIRMWARE"]
+  },
+  {
+    "namespace": "ch.mobility.mob2charger",
+    "type": "record",
+    "name": "CSStatusForIdRequest",
+    "fields": [
+      {"name": "RequestInfo", "type": "CSRequest" },
+      {"name": "Id", "type": "string"},
+      {"name": "ConnectorId", "type": ["null", "int"], "default": null},
+      {"name": "DaysOfHistoryData", "type": ["null", "int"], "default": null}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.mob2charger",
+    "type": "record",
+    "name": "CSStatusConnectedRequest",
+    "fields": [
+      {"name": "RequestInfo", "type": "CSRequest" }
+    ]
+  },
+  {
+    "namespace": "ch.mobility.mob2charger",
+    "type": "record",
+    "name": "CSRecentlyConnectedRequest",
+    "fields": [
+      {"name": "RequestInfo", "type": "CSRequest" },
+      {"name": "DaysOfHistoryData", "type": ["null", "int"], "default": null}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.mob2charger",
+    "type": "record",
+    "name": "CSResetRequest",
+    "fields": [
+      {"name": "RequestInfo", "type": "CSRequest" },
+      {"name": "Id", "type": "string"}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.mob2charger",
+    "type": "record",
+    "name": "CSUnlockRequest",
+    "fields": [
+      {"name": "RequestInfo", "type": "CSRequest" },
+      {"name": "Id", "type": "string"},
+      {"name": "ConnectorId", "type": "int"}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.mob2charger",
+    "type": "record",
+    "name": "CSStartChargingRequest",
+    "fields": [
+      {"name": "RequestInfo", "type": "CSRequest" },
+      {"name": "Id", "type": "string"},
+      {"name": "ConnectorId", "type": "int"},
+      {"name": "TagId", "type": ["null", "string"], "default": null},
+      {"name": "MaxCurrent", "type": ["null", "int"], "default": null},
+      {"name": "NumberOfPhases", "type": ["null", "int"], "default": null}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.mob2charger",
+    "type": "record",
+    "name": "CSStopChargingRequest",
+    "fields": [
+      {"name": "RequestInfo", "type": "CSRequest" },
+      {"name": "Id", "type": "string"},
+      {"name": "ConnectorId", "type": ["null", "int"], "default": null}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.mob2charger",
+    "type": "record",
+    "name": "CSChangeChargingCurrentRequest",
+    "fields": [
+      {"name": "RequestInfo", "type": "CSRequest" },
+      {"name": "Id", "type": "string"},
+      {"name": "ConnectorId", "type": "int"},
+      {"name": "MaxCurrent", "type": "int"},
+      {"name": "NumberOfPhases", "type": ["null", "int"], "default": null}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.mob2charger",
+    "type": "record",
+    "name": "CSTriggerRequest",
+    "fields": [
+      {"name": "RequestInfo", "type": "CSRequest" },
+      {"name": "Id", "type": "string"},
+      {"name": "ConnectorId", "type": "int"},
+      {"name": "Triggertype", "type": "CPTriggerKeywordsV1XEnum"}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.mob2charger",
+    "type": "record",
+    "name": "CSOperationalStatusRequest",
+    "fields": [
+      {"name": "RequestInfo", "type": "CSRequest" },
+      {"name": "Id", "type": "string"},
+      {"name": "ConnectorId", "type": "int"},
+      {"name": "OperationalStatus", "type": "CPOperationalStatusEnum"}
+    ]
+  }
+]
