@@ -107,12 +107,35 @@
   {
     "namespace": "ch.mobility.charger2mob",
     "type": "record",
+    "name": "CPConnectedVehicle",
+    "fields": [
+      {"name": "VIN", "type": "string"},
+      {"name": "Numberplate", "type": "string"},
+      {"name": "Vendor", "type": "string"},
+      {"name": "Model", "type": "string"},
+      {"name": "StartActiveTransaction", "type": ["null", "string"], "default": null},
+      {"name": "ChargingcablePluginAt", "type": ["null", "string"], "default": null},
+      {"name": "ChargingAmpereL1", "type": "int"},
+      {"name": "ChargingAmpereL2", "type": "int"},
+      {"name": "ChargingAmpereL3", "type": "int"},
+      {"name": "ChargingAmpereDC", "type": "int"},
+      {"name": "ChargingPowerWatt", "type": "int"},
+      {"name": "ChargedEnergyWatt", "type": "int"},
+      {"name": "MinStateOfCharge", "type": ["null", "int"], "default": null},
+      {"name": "MaxStateOfCharge", "type": ["null", "int"], "default": null},
+      {"name": "StateOfCharge", "type": ["null", "int"], "default": null}
+    ]
+  },
+  {
+    "namespace": "ch.mobility.charger2mob",
+    "type": "record",
     "name": "CPStatus",
     "fields": [
       {"name": "ConnectorId", "type": "int"},
       {"name": "ConnectorStatus", "type": ["null", "CPConnectorStatusEnum"], "default": null},
       {"name": "ChargingState", "type": ["null", "CPChargingStateEnum"], "default": null},
       {"name": "ActiveTransaction", "type": ["null", "CPStatusConnectedConnectorActiveTransaction"], "default": null},
+      {"name": "ConnectedVehicle", "type": ["null", "CPConnectedVehicle"], "default": null},
       {"name": "ErrorCode", "type": ["null", "string"], "default": null},
       {"name": "ErrorInfo", "type": ["null", "string"], "default": null},
       {"name":"CPStatusHistoryList",
@@ -177,7 +200,8 @@
       {"name": "ConnectorId", "type": "int"},
       {"name": "ConnectorStatus", "type": ["null", "CPConnectorStatusEnum"], "default": null},
       {"name": "ChargingState", "type": ["null", "CPChargingStateEnum"], "default": null},
-      {"name": "ActiveTransaction", "type": ["null", "CPStatusConnectedConnectorActiveTransaction"], "default": null}
+      {"name": "ActiveTransaction", "type": ["null", "CPStatusConnectedConnectorActiveTransaction"], "default": null},
+      {"name": "ConnectedVehicle", "type": ["null", "CPConnectedVehicle"], "default": null}
     ]
   },
   {
