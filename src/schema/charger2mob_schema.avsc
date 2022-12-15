@@ -101,7 +101,8 @@
       {"name": "ChargingAmpereDC", "type": "int"},
       {"name": "ChargingPowerWatt", "type": "int"},
       {"name": "ChargedEnergyWatt", "type": "int"},
-      {"name": "StateOfCharge", "type": ["null", "int"], "default": null}
+      {"name": "StateOfCharge", "type": ["null", "int"], "default": null},
+      {"name": "EVMACAddress", "type": ["null", "string"], "default": null}
     ]
   },
   {
@@ -111,6 +112,7 @@
     "fields": [
       {"name": "VIN", "type": "string"},
       {"name": "Numberplate", "type": "string"},
+      {"name": "EVMACAddress", "type": ["null", "string"], "default": null},
       {"name": "Vendor", "type": "string"},
       {"name": "Model", "type": "string"},
       {"name": "StartActiveTransaction", "type": ["null", "string"], "default": null},
